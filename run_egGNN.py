@@ -7,6 +7,7 @@
 import os
 import argparse
 
+from egGNN.model import *
 from egGNN.egGNN_pipeline import run_egGNN
 
 
@@ -21,7 +22,11 @@ def get_parser():
 
 
 def run(args):
-    run_egGNN(args)
+    affinity = run_egGNN(args)
+
+    # delete
+    with open('eggnn', 'a') as f:
+        f.write(f"{args.ligand_name.split('_')[0]},{affinity}\n")
 
 
 if __name__ == '__main__':

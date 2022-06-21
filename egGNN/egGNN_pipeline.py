@@ -10,7 +10,7 @@ import torch
 from rdkit import Chem
 from dgllife.utils import load_molecule
 
-from egGNN.model import EGGNN
+from egGNN.model import EGG
 from egGNN.feat import ConstructGraph
 
 
@@ -34,11 +34,10 @@ def run_egGNN(args):
     ligand, protein = preprocess(args.ligand, args.protein)
 
     # run model
-    model = EGGNN(53, 128, 32, 128)
     device = torch.device(f'cuda:{args.gpu}' if torch.cuda.is_available() else 'cpu')
-    model.load_state_dict(torch.load(os.path.join(CWD, 'checkpoint/16-8412.sav'), map_location=device))
-    model = model.to(device)
+    model = torch.load(os.path.join(CWD, 'checkpoint/16-8596.sav'), map_location=device)
     model.eval()
 
     affinity = model((ligand, protein), device)[0].item()
     print(f"the affinity of {args.ligand_name} and {args.protein_name} is {affinity:.2f}")
+    return affinity
